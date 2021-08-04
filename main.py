@@ -1,27 +1,36 @@
 # Created by breadA#3012
 
 # Imports
+from audioplayer import AudioPlayer
+from gtts import gTTS
 import random
 import os
-import test.display
+import chats.display
+import chats.commands
+import inquirer
+
+def tts(msg, language='en'):
+    myobj = gTTS(text=msg, lang=language, slow=False)
+    myobj.save("audio.mp3")
+    AudioPlayer("audio.mp3").play(block=True)
+
 
 # For Linux
-# os.system('clear')
-print("Lemme gather some basic information about you:")
 
-# Inputs
-# Make sure these are lowercase
-YES = "yes"
-NO = "no"
 
-# Main Outputs
 
-name = input("What is you name? ")
-if name == "breadA" or name == "Dhairy":
-    print("Hello fellow owner")
+questions = [
+  inquirer.Text('name', message="What's your name"),
+  inquirer.Confirm('student', message="Are you a student?"),
+]
 
-a_student = input("Are you a student? ")
-if a_student.strip().lower() == YES:
-    print("OKAY!")
-else:
-    print("mm.. okay.. nice")
+answers = inquirer.prompt(questions)
+# { 'name': 'breadA', 'student': True }
+name = answers['name']
+if answers['name']:
+    tts(f"Hello {name}")
+
+if answers['student'] == True:
+    tts("Okay, so you are a student? nice!")
+
+
